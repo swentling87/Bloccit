@@ -14,7 +14,7 @@
 end
 posts = Post.all
 
-Post.find_or_create_by(title: "Test Post", body: "Hello World")
+test_post = Post.find_or_create_by(title: "Test Post", body: "Hello World")
 
 #Create Comments
 100.times do
@@ -23,7 +23,7 @@ Post.find_or_create_by(title: "Test Post", body: "Hello World")
     body: RandomData.random_paragraph
   )
 end
-Comment.find_or_create_by(body: "Allons-y!")
+Comment.find_or_create_by(post: test_post, body: "Allons-y!")
 puts "Seed finished"
 puts "#{Post.count} posts created"
 puts "#{Comment.count} comments created"
