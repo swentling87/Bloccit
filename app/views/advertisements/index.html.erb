@@ -1,0 +1,5 @@
+<h1>Advertisements</h1>
+<p><%= link_to 'Create an Ad' , new_advertisement_path , class:"btn btn-success" %></p>
+<% @advertisements.each do |ad| %>
+<p><%= link_to ad.title, ad %></p>
+<% end %>
