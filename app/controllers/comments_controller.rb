@@ -5,24 +5,26 @@ class CommentsController < ApplicationController
 
   def create
     id = params[:post_id] || params[:topic_id]
-    if id == params[:post_id]
+    if params[:post_id]
       @post = Post.find(id)
-      comment = @post.comments.new(comment_params)
-      comment.user = current_user
+      @comment = @post.comments.build(comment_params)
+      @comment.user = current_user
 
-      if comment.save
+      if @comment.save
+        @post.comments << @comment
         flash[:notice] = "Comment saved successfully."
         redirect_to [@post.topic, @post]
       else
         flash[:alert] = "Comment failed to save."
         redirect_to [@post.topic, @post]
       end
-    elsif id == params[:topic_id]
+    elsif params[:topic_id]
       @topic = Topic.find(id)
-      comment = @topic.comments.new(comment_params)
-      comment.user = current_user
+      @comment = @topic.comments.build(comment_params)
+      @comment.user = current_user
 
-      if comment.save
+      if @comment.save
+        @topic.comments << @comment
         flash[:notice] = "Comment saved successfully."
         redirect_to @topic
       else
@@ -34,11 +36,11 @@ class CommentsController < ApplicationController
 
   def destroy
     id = params[:post_id] || params[:topic_id]
-    if id == params[:post_id]
-    @post = Post.find(id)
-    comment = @post.comments.find(id)
+    if params[:post_id]
+      @post = Post.find(id)
+      @comment = Comment.find(params[:id])
 
-    if comment.destroy
+    if @comment.destroy
       flash[:notice] = "Comment was deleted."
       redirect_to [@post.topic, @post]
     else
@@ -48,9 +50,9 @@ class CommentsController < ApplicationController
 
     elsif params[:topic_id]
       @topic = Topic.find(id)
-      comment = @topic.comments.find(id)
+      @comment = Comment.find(params[:id])
 
-      if comment.destroy
+      if @comment.destroy
         flash[:notice] = "Comment was deleted."
         redirect_to @topic
       else

@@ -39,7 +39,7 @@ posts = Post.all
 50.times do
   Comment.create!(
     user: users.sample,
-    post: posts.sample,
+    #post: posts.sample,
     body: RandomData.random_paragraph
   )
 end
@@ -47,7 +47,7 @@ end
 25.times do
   Comment.create!(
     user: users.sample,
-    topic: topics.sample,
+    #topic: topics.sample,
     body: RandomData.random_paragraph
   )
 end
