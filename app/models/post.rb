@@ -1,9 +1,10 @@
 class Post < ActiveRecord::Base
   belongs_to :topic
   belongs_to :user
-  has_many :comments, dependent: :destroy
+  has_many :comments, through: :commentlings, dependent: :destroy
   has_many :labelings, as: :labelable
   has_many :labels, through: :labelings
+  has_many :commentlings, as: :commentable
 
   default_scope { order('created_at DESC')}
 

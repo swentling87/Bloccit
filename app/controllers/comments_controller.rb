@@ -4,22 +4,39 @@ class CommentsController < ApplicationController
   before_action :authorize_user, only: [:destroy]
 
   def create
-    @post = Post.find(params[:post_id])
-    comment = @post.comments.new(comment_params)
-    comment.user = current_user
+    id = params[:post_id] || params[:topic_id]
+    if id == params[:post_id]
+      @post = Post.find(id)
+      comment = @post.comments.new(comment_params)
+      comment.user = current_user
 
-    if comment.save
-      flash[:notice] = "Comment saved successfully."
-      redirect_to [@post.topic, @post]
-    else
-      flash[:alert] = "Comment failed to save."
-      redirect_to [@post.topic, @post]
+      if comment.save
+        flash[:notice] = "Comment saved successfully."
+        redirect_to [@post.topic, @post]
+      else
+        flash[:alert] = "Comment failed to save."
+        redirect_to [@post.topic, @post]
+      end
+    elsif id == params[:topic_id]
+      @topic = Topic.find(id)
+      comment = @topic.comments.new(comment_params)
+      comment.user = current_user
+
+      if comment.save
+        flash[:notice] = "Comment saved successfully."
+        redirect_to @topic
+      else
+        flash[:alert] = "Comment failed to save."
+        redirect_to @topic
+      end
     end
   end
 
   def destroy
-    @post = Post.find(params[:post_id])
-    comment = @post.comments.find(params[:id])
+    id = params[:post_id] || params[:topic_id]
+    if id == params[:post_id]
+    @post = Post.find(id)
+    comment = @post.comments.find(id)
 
     if comment.destroy
       flash[:notice] = "Comment was deleted."
@@ -27,6 +44,19 @@ class CommentsController < ApplicationController
     else
       flash[:alert] = "Comment couldn't be deleted. Try again."
       redirect_to [@post.topic, @post]
+    end
+
+    elsif params[:topic_id]
+      @topic = Topic.find(id)
+      comment = @topic.comments.find(id)
+
+      if comment.destroy
+        flash[:notice] = "Comment was deleted."
+        redirect_to @topic
+      else
+        flash[:alert] = "Comment couldn't be deleted. Try again."
+        redirect_to @topic
+      end
     end
   end
 
