@@ -370,4 +370,11 @@ RSpec.describe PostsController, type: :controller do
       end
     end
   end
+  
+      describe "#create_post" do
+        it "tests create_post functionality" do
+          post = my_post
+          expect(post.points).to eq(1)
+        end
+      end
 end
