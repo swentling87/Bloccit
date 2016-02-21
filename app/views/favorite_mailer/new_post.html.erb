@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h1>Congratulations! You have just created a new post "<%= @post.title %>" and will receive e-mail notifications for each comment received.</h1>
+    <small>
+      If you wish to end these e-mail notifications, simply "unfavorite" your post.
+    </small>
+    <p>
+      <%= link_to "View Post on site", topic_post_url(@post.topic, @post) %>
+    </p>
+  </body>
+</html>
