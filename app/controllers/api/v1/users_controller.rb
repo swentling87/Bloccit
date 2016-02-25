@@ -13,7 +13,6 @@ class Api::V1::UsersController < Api::V1::BaseController
   end
 
   def update
-Rails.logger.info "**********  hello!  we're in the update action!"
     user = User.find(params[:id])
 
     if user.update_attributes(user_params)

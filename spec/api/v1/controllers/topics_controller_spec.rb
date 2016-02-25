@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::TopicsController, type: :controller do
   let(:my_user) { create(:user) }
   let(:my_topic) { create(:topic) }
+  let(:my_post) { create(:post, user: my_user, topic: my_topic) }
 
   context "unauthenticated user" do
     it "GET index returns http success" do
@@ -29,6 +30,12 @@ RSpec.describe Api::V1::TopicsController, type: :controller do
        delete :destroy, id: my_topic.id
        expect(response).to have_http_status(401)
      end
+
+     it "POST create returns http unauthenticated" do
+       post :create, topic: my_topic, post: {title: RandomData.random_sentence, body: RandomData.random_paragraph}
+       expect(response).to have_http_status(401)
+     end
+
   end
 
   context "unauthorized user" do
@@ -67,6 +74,7 @@ RSpec.describe Api::V1::TopicsController, type: :controller do
         my_user.admin!
         controller.request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Token.encode_credentials(my_user.auth_token)
         @new_topic = build(:topic)
+        @new_post = build(:post, topic: my_topic, user: my_user)
       end
 
       describe "PUT update" do
@@ -103,6 +111,7 @@ RSpec.describe Api::V1::TopicsController, type: :controller do
          expect(hashed_json["description"]).to eq(@new_topic.description)
        end
      end
+
      describe "DELETE destroy" do
       before { delete :destroy, id: my_topic.id }
 
