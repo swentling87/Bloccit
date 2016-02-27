@@ -131,5 +131,23 @@ RSpec.describe Api::V1::TopicsController, type: :controller do
         expect{ Topic.find(my_topic.id) }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
+
+    describe "POST create_post" do
+     before { post :create_post, post: {title: @new_post.name, body: @new_post.description} }
+
+     it "returns http success" do
+       expect(response).to have_http_status(:success)
+     end
+
+     it "returns json content type" do
+       expect(response.content_type).to eq 'application/json'
+     end
+
+     it "creates a topic with the correct attributes" do
+       hashed_json = JSON.parse(response.body)
+       expect(hashed_json["title"]).to eq(@new_post.title)
+       expect(hashed_json["body"]).to eq(@new_post.body)
+     end
+   end
   end
 end
