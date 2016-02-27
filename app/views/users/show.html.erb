@@ -29,9 +29,9 @@
       <h2>Favorites</h2>
       <% @user.favorites.each do |fave| %>
       <ul>
-        <li><%= find_faves(fave.id).title %><br>
-          <small><%= image_tag find_faves(fave.id).user.avatar_url(24), class: "gravatar" %> </small>
-          <small><%= find_faves(fave.id).votes.count %> Votes, <%= find_faves(fave.id).comments.count %> Comments</small>
+        <li><%= fave.post.title %><br>
+          <small><%= image_tag fave.post.user.avatar_url(24), class: "gravatar" %> </small>
+          <small><%= fave.post.votes.count %> Votes, <%= fave.post.comments.count %> Comments</small>
         </li>
       </ul>
       <% end %>

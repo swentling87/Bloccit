@@ -15,7 +15,4 @@ module UsersHelper
     end
   end
 
-  def find_faves(id)
-    @post = Post.find(params[:id])
-  end
 end
