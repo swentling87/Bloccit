@@ -28,7 +28,6 @@ Rails.application.routes.draw do
         member do
           post :create_post
         end
-        resources :posts, only: [:create]
       end
       resources :posts, only: [:update, :destroy]
     end

@@ -44,11 +44,12 @@ class Api::V1::TopicsController < Api::V1::BaseController
 
   def create_post
     topic = Topic.find(params[:id])
-    post = topic.Post.new
+    post = topic.posts.new(post_params)
+    post.user = @current_user
 
-    if post.valid?
-      post.save!
-      render json: topic.post.to_json, status: 201
+    if post
+       post.save!
+       render json: post.to_json, status: 201
     else
       render json: {error: "Post is invalid", status: 400}, status: 400
     end
@@ -61,6 +62,6 @@ class Api::V1::TopicsController < Api::V1::BaseController
   end
 
   def post_params
-    params.require(:post).permit(:body, :description)
+    params.require(:post).permit(:title, :body)
   end
 end

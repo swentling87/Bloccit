@@ -74,7 +74,7 @@ RSpec.describe Api::V1::TopicsController, type: :controller do
         my_user.admin!
         controller.request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Token.encode_credentials(my_user.auth_token)
         @new_topic = build(:topic)
-        @new_post = build(:post, topic: my_topic, user: my_user)
+        @new_post = build(:post)
       end
 
       describe "PUT update" do
@@ -133,7 +133,7 @@ RSpec.describe Api::V1::TopicsController, type: :controller do
     end
 
     describe "POST create_post" do
-     before { post :create_post, post: {title: @new_post.name, body: @new_post.description} }
+     before { post :create_post, id: my_topic.id, user: my_user, post: { title: @new_post.title, body: @new_post.body} }
 
      it "returns http success" do
        expect(response).to have_http_status(:success)
@@ -143,7 +143,7 @@ RSpec.describe Api::V1::TopicsController, type: :controller do
        expect(response.content_type).to eq 'application/json'
      end
 
-     it "creates a topic with the correct attributes" do
+     it "creates a post with the correct attributes" do
        hashed_json = JSON.parse(response.body)
        expect(hashed_json["title"]).to eq(@new_post.title)
        expect(hashed_json["body"]).to eq(@new_post.body)
